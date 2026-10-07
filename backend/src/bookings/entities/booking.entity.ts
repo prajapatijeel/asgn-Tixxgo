@@ -14,6 +14,8 @@ import { TravellerEntity } from './traveller.entity';
 import { PaymentEntity } from './payment.entity';
 import { SupplierBookingEntity } from './supplier-booking.entity';
 
+
+
 /**
  * Payment status — tracks whether the customer has paid.
  * Separate from booking status because payment and booking are separate concerns.

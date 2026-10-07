@@ -1,0 +1,236 @@
+/* ── Results Page ────────────────────────────────── */
+.results-page {
+  padding: 1.75rem 0 3rem;
+  min-height: calc(100vh - 60px);
+}
+
+/* ── Page Header ─────────────────────────────────── */
+.results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.results-title {
+  font-size: 1.5rem;
+  margin-bottom: .25rem;
+}
+.results-subtitle {
+  font-size: .9375rem;
+  color: var(--color-text-muted);
+}
+
+/* ── Flight Card ─────────────────────────────────── */
+.flight-card {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.flight-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.flight-card--selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light), var(--shadow-md);
+}
+
+.flight-card__main {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Airline Info */
+.airline-info {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.airline-code-badge {
+  width: 44px;
+  height: 44px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8125rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.airline-name { font-weight: 600; font-size: .9375rem; }
+.flight-number { font-size: .8125rem; }
+
+/* Route */
+.route {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.route-point {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  min-width: 48px;
+}
+.route-time { font-size: 1.4375rem; font-weight: 700; line-height: 1; }
+.route-iata { font-size: .8125rem; font-weight: 500; color: var(--color-text-secondary); }
+
+.route-middle {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+}
+.route-duration { font-size: .8125rem; color: var(--color-text-muted); }
+.route-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--color-text-muted);
+}
+.route-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  flex-shrink: 0;
+}
+.route-bar { flex: 1; height: 1px; background: var(--color-border); }
+.route-arrow { font-size: .875rem; flex-shrink: 0; }
+.route-class { font-size: .75rem; }
+
+/* Meta badges */
+.flight-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  font-size: .8125rem;
+}
+
+/* Price Column */
+.flight-card__price {
+  width: 190px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--color-border);
+  background: #fafbfc;
+  padding: 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .625rem;
+  text-align: center;
+}
+
+.price-final {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+.price-breakdown { font-size: .8125rem; }
+.reval-loading { color: var(--color-text-muted); font-size: .875rem; }
+
+/* ── Empty State ─────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+.empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  opacity: .3;
+}
+
+/* ── Revalidation Panel ──────────────────────────── */
+.revalidation-panel {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border-left: 4px solid var(--color-primary);
+}
+
+.reval-confirmed, .reval-changed, .reval-unavailable {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.reval-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.reval-icon--success { background: var(--color-success-light); color: var(--color-success); }
+.reval-icon--warning { background: var(--color-warning-light); color: var(--color-warning); }
+.reval-icon--danger  { background: var(--color-danger-light);  color: var(--color-danger); }
+
+.reval-title { margin-bottom: .375rem; }
+.reval-content { flex: 1; }
+
+.reval-note {
+  font-size: .875rem;
+  color: var(--color-warning);
+  margin-top: .75rem;
+  font-weight: 500;
+}
+
+.reval-actions {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Price comparison */
+.price-comparison {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+.price-item { display: flex; flex-direction: column; gap: .25rem; }
+.price-label { font-size: .78125rem; color: var(--color-text-muted); font-weight: 500; }
+.price-value { font-size: 1.1875rem; font-weight: 700; }
+.price-value--strikethrough {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+.price-value--highlight { color: var(--color-primary); }
+.price-arrow { font-size: 1.25rem; color: var(--color-text-muted); margin-top: 1rem; }
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 700px) {
+  .flight-card { flex-direction: column; }
+  .flight-card__price {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+  }
+  .route { gap: .5rem; }
+  .route-time { font-size: 1.125rem; }
+  .reval-confirmed, .reval-changed, .reval-unavailable { flex-direction: column; }
+}

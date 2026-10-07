@@ -1,0 +1,262 @@
+.booking-page {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-bg);
+  min-height: calc(100vh - 72px);
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+}
+
+.booking-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.booking-subtitle {
+  color: var(--color-gray-500);
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 900px) {
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-primary-100);
+  color: var(--color-primary-700);
+  border-radius: 50%;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.col-half {
+  flex: 1;
+}
+
+.is-invalid {
+  border-color: var(--color-danger);
+}
+
+.is-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.error-msg {
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+  margin-top: 4px;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.payment-option {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 2px solid var(--color-primary-200);
+  background-color: var(--color-primary-50);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.payment-title {
+  font-weight: 600;
+  color: var(--color-gray-900);
+}
+
+.payment-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-600);
+  margin-top: 2px;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.price-summary-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+}
+
+.price-highlight {
+  font-size: var(--font-size-xl);
+  color: var(--color-primary-700);
+  font-weight: 800;
+}
+
+.summary-card {
+  position: sticky;
+  top: var(--spacing-lg);
+}
+
+.summary-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.airline-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: 4px;
+}
+
+.airline-name {
+  font-weight: 600;
+  color: var(--color-gray-800);
+}
+
+.summary-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-md);
+}
+
+.route-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.route-col .time {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-gray-900);
+}
+
+.route-col .city {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+}
+
+.route-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.route-center .duration {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+}
+
+.route-center .arrow {
+  color: var(--color-primary-500);
+  font-size: var(--font-size-sm);
+}
+
+.summary-divider {
+  height: 1px;
+  background-color: var(--color-gray-200);
+  margin: var(--spacing-md) 0;
+}
+
+.price-breakdown h4 {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-xs);
+}
+
+.price-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  margin-bottom: 6px;
+  color: var(--color-gray-700);
+}
+
+.price-line--total {
+  font-weight: 700;
+  font-size: var(--font-size-md);
+  color: var(--color-gray-900);
+  padding-top: var(--spacing-xs);
+  border-top: 1px dashed var(--color-gray-300);
+  margin-top: var(--spacing-xs);
+}
+
+.summary-footer {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-gray-200);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+}
+
+.meta-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.meta-label {
+  color: var(--color-gray-500);
+}
+
+.meta-value {
+  font-weight: 500;
+  color: var(--color-gray-800);
+}

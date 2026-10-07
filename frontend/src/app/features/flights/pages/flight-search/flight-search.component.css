@@ -1,0 +1,68 @@
+/* ── Search Page ─────────────────────────────────── */
+.search-page {
+  min-height: calc(100vh - 60px);
+}
+
+.hero {
+  background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+  color: #fff;
+  padding: 3.5rem 0 2.5rem;
+  text-align: center;
+}
+
+.hero-title {
+  color: #fff;
+  font-size: 2.25rem;
+  margin-bottom: .5rem;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, .82);
+  font-size: 1.0625rem;
+}
+
+/* ── Search Card ─────────────────────────────────── */
+.search-card {
+  margin: -1.75rem auto 2rem;
+  max-width: 960px;
+  padding: 2rem;
+}
+
+.search-card__heading {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+/* ── Form Row ────────────────────────────────────── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.5fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.form-group--sm { /* adults column */ }
+
+@media (max-width: 900px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .search-card {
+    margin: -1rem 1rem 1.5rem;
+    padding: 1.25rem;
+  }
+}
+
+/* ── Submit ──────────────────────────────────────── */
+.search-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}

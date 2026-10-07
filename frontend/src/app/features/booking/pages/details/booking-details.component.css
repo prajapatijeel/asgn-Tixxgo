@@ -1,0 +1,382 @@
+.details-page {
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  min-height: calc(100vh - 64px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+}
+
+.page-subtitle {
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.ref-inline {
+  font-weight: 700;
+  color: #c4b5fd;
+  letter-spacing: 0.05em;
+}
+
+/* ── Status strip ────────────────────────────────── */
+.status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.status-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--color-border);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.875rem;
+  border-radius: 999px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.status-success { background: rgba(16,185,129,0.18); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.35); }
+.status-danger  { background: rgba(239,68,68,0.18);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.35); }
+.status-warning { background: rgba(245,158,11,0.18); color: #fcd34d; border: 1px solid rgba(245,158,11,0.35); }
+.status-info    { background: rgba(108,99,255,0.18); color: #c4b5fd; border: 1px solid rgba(108,99,255,0.35); }
+
+.pnr-value {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: #c4b5fd;
+  letter-spacing: 0.08em;
+}
+
+/* ── Main grid ────────────────────────────────────── */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .details-grid { grid-template-columns: 1fr; }
+  .status-strip { flex-direction: column; align-items: flex-start; }
+  .status-divider { width: 100%; height: 1px; }
+}
+
+/* ── Section titles ─────────────────────────────── */
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* ── Flight box ──────────────────────────────────── */
+.flight-box {
+  background: rgba(108,99,255,0.06);
+  border: 1px solid rgba(108,99,255,0.2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.flight-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flight-num {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.flight-date {
+  font-size: var(--font-size-sm);
+}
+
+.flight-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.route-city {
+  display: flex;
+  flex-direction: column;
+}
+
+.route-city--right {
+  text-align: right;
+}
+
+.route-time {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.route-iata {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: #c4b5fd;
+  letter-spacing: 0.04em;
+}
+
+.route-line {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 0 var(--spacing-md);
+  position: relative;
+}
+
+.route-dash {
+  display: block;
+  height: 2px;
+  flex: 1;
+  background: var(--color-border);
+}
+
+.route-plane {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  font-size: var(--font-size-md);
+  color: #c4b5fd;
+  padding: 0 6px;
+}
+
+/* ── Passengers ──────────────────────────────────── */
+.passengers-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.passenger-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.passenger-avatar {
+  font-size: 1.5rem;
+}
+
+.passenger-name {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* ── Info table ──────────────────────────────────── */
+.info-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: var(--color-text-muted);
+}
+
+.info-value {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.pnr-code {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: #c4b5fd;
+  letter-spacing: 0.06em;
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.sidebar-title {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.warning-title {
+  color: #fcd34d;
+}
+
+/* Price list */
+.price-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.price-row--total {
+  font-weight: 700;
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  padding-top: var(--spacing-xs);
+  border-top: 1px dashed var(--color-border);
+  margin-top: var(--spacing-xs);
+}
+
+.payment-meta {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── Cancellation cards ──────────────────────────── */
+.cancel-card {
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.cancel-preview-card {
+  border: 1px solid rgba(245,158,11,0.3);
+  background: rgba(245,158,11,0.05);
+}
+
+.cancel-done-card {
+  border: 1px solid rgba(16,185,129,0.3);
+  background: rgba(16,185,129,0.05);
+  text-align: center;
+}
+
+.done-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(16,185,129,0.2);
+  color: #6ee7b7;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-sm);
+}
+
+.done-title {
+  font-weight: 700;
+  color: #6ee7b7;
+}
+
+/* Preview amounts */
+.preview-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.preview-row--refund {
+  padding-top: var(--spacing-xs);
+  border-top: 1px dashed var(--color-border);
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+}
+
+.preview-question {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Error state */
+.error-state {
+  padding: var(--spacing-2xl);
+  max-width: 480px;
+  margin: var(--spacing-2xl) auto;
+}
+
+.error-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  font-size: 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+}

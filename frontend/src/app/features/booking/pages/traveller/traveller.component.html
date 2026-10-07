@@ -1,0 +1,299 @@
+<app-header></app-header>
+
+<main class="booking-page">
+  <div class="container">
+
+    <!-- ── Header & Progress Bar ─────────────────────────────── -->
+    <div class="booking-header">
+      <div>
+        <h1 class="booking-title">Passenger Details &amp; Payment</h1>
+        <p class="booking-subtitle">Review flight details and enter passenger information to finalize your booking</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" (click)="goBackToResults()">
+        ← Back to Results
+      </button>
+    </div>
+
+    <!-- ── Error Alert ──────────────────────────────────────── -->
+    @if (errorMessage) {
+      <div class="alert alert-danger mb-3" role="alert">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-content">
+          <strong>Booking Request Issue</strong>
+          <p>{{ errorMessage }}</p>
+          <p class="text-muted text-sm mt-1">
+            Idempotency Key preserved: <code>{{ idempotencyKey }}</code> (Retrying won't double-charge).
+          </p>
+        </div>
+      </div>
+    }
+
+    <!-- ── Main Grid ────────────────────────────────────────── -->
+    @if (selectedOffer) {
+      <div class="booking-grid">
+
+        <!-- Left Column: Form -->
+        <div class="booking-form-col">
+          <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+
+            <!-- Passenger Details Card -->
+            <div class="card mb-3">
+              <h2 class="card-title">
+                <span class="step-num">1</span> Primary Passenger Details
+              </h2>
+
+              <div class="form-row">
+                <div class="form-group col-half">
+                  <label for="firstName" class="form-label">First Name *</label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    [class.is-invalid]="isFieldInvalid('firstName')"
+                    placeholder="First Name as on Passport"
+                  />
+                  @if (isFieldInvalid('firstName')) {
+                    <div class="error-msg">First name is required (min 2 characters).</div>
+                  }
+                </div>
+
+                <div class="form-group col-half">
+                  <label for="lastName" class="form-label">Last Name *</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    [class.is-invalid]="isFieldInvalid('lastName')"
+                    placeholder="Last Name as on Passport"
+                  />
+                  @if (isFieldInvalid('lastName')) {
+                    <div class="error-msg">Last name is required (min 2 characters).</div>
+                  }
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-half">
+                  <label for="dateOfBirth" class="form-label">Date of Birth *</label>
+                  <input
+                    id="dateOfBirth"
+                    type="date"
+                    class="form-control"
+                    formControlName="dateOfBirth"
+                    [class.is-invalid]="isFieldInvalid('dateOfBirth')"
+                  />
+                  @if (isFieldInvalid('dateOfBirth')) {
+                    <div class="error-msg">Valid date of birth is required.</div>
+                  }
+                </div>
+
+                <div class="form-group col-half">
+                  <label for="nationality" class="form-label">Nationality *</label>
+                  <input
+                    id="nationality"
+                    type="text"
+                    class="form-control text-uppercase"
+                    formControlName="nationality"
+                    maxlength="2"
+                    [class.is-invalid]="isFieldInvalid('nationality')"
+                    placeholder="IN"
+                  />
+                  @if (isFieldInvalid('nationality')) {
+                    <div class="error-msg">2-letter ISO country code required (e.g. IN).</div>
+                  }
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-half">
+                  <label for="passportNumber" class="form-label">Passport Number (Optional)</label>
+                  <input
+                    id="passportNumber"
+                    type="text"
+                    class="form-control text-uppercase"
+                    formControlName="passportNumber"
+                    placeholder="e.g. A1234567"
+                  />
+                </div>
+
+                <div class="form-group col-half">
+                  <label for="passportExpiry" class="form-label">Passport Expiry (Optional)</label>
+                  <input
+                    id="passportExpiry"
+                    type="date"
+                    class="form-control"
+                    formControlName="passportExpiry"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Info Card -->
+            <div class="card mb-3">
+              <h2 class="card-title">
+                <span class="step-num">2</span> Contact Information
+              </h2>
+              <p class="card-desc">Your e-ticket confirmation and itinerary will be sent to these details.</p>
+
+              <div class="form-row">
+                <div class="form-group col-half">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    [class.is-invalid]="isFieldInvalid('email')"
+                    placeholder="jeel@example.com"
+                  />
+                  @if (isFieldInvalid('email')) {
+                    <div class="error-msg">Valid email address is required.</div>
+                  }
+                </div>
+
+                <div class="form-group col-half">
+                  <label for="phone" class="form-label">Phone Number *</label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    class="form-control"
+                    formControlName="phone"
+                    [class.is-invalid]="isFieldInvalid('phone')"
+                    placeholder="+919876543210"
+                  />
+                  @if (isFieldInvalid('phone')) {
+                    <div class="error-msg">Valid phone number is required (+91...).</div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method Card -->
+            <div class="card mb-3">
+              <h2 class="card-title">
+                <span class="step-num">3</span> Payment Method
+              </h2>
+
+              <div class="payment-options">
+                <label class="payment-option selected">
+                  <input
+                    type="radio"
+                    formControlName="paymentMethod"
+                    value="MOCK"
+                    checked
+                  />
+                  <div class="payment-info">
+                    <div class="payment-title">⚡ Mock Instant Payment</div>
+                    <div class="payment-desc">Simulated payment gateway for assessment testing. Instantly processes transaction.</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="form-actions card">
+              <div class="price-summary-mini">
+                <span>Total Amount Due:</span>
+                <span class="price-highlight">
+                  {{ formatPrice(selectedOffer.pricing.finalPrice, selectedOffer.pricing.currency) }}
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-success btn-lg btn-full"
+                id="btn-confirm-booking"
+                [disabled]="isSubmitting"
+              >
+                @if (isSubmitting) {
+                  <span class="spinner"></span>
+                  Processing Booking &amp; Payment...
+                } @else {
+                  Confirm &amp; Pay {{ formatPrice(selectedOffer.pricing.finalPrice, selectedOffer.pricing.currency) }} →
+                }
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Right Column: Flight Summary Sidebar -->
+        <div class="booking-summary-col">
+          <div class="card summary-card sticky-top">
+            <h3 class="summary-title">Flight Summary</h3>
+
+            <div class="summary-segment">
+              <div class="airline-badge">
+                <span class="badge badge-blue">{{ selectedOffer.segments[0].airlineCode }}</span>
+                <span class="airline-name">{{ selectedOffer.segments[0].airline }}</span>
+              </div>
+              <div class="flight-no text-muted">{{ selectedOffer.segments[0].flightNumber }}</div>
+
+              <div class="summary-route">
+                <div class="route-col">
+                  <span class="time">{{ selectedOffer.segments[0].departureTime | date: 'HH:mm' }}</span>
+                  <span class="city">{{ selectedOffer.segments[0].origin }}</span>
+                </div>
+                <div class="route-center">
+                  <span class="duration">{{ selectedOffer.segments[0].duration }}</span>
+                  <span class="arrow">✈</span>
+                </div>
+                <div class="route-col text-right">
+                  <span class="time">{{ selectedOffer.segments[0].arrivalTime | date: 'HH:mm' }}</span>
+                  <span class="city">{{ selectedOffer.segments[0].destination }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="price-breakdown">
+              <h4>Fare Breakdown</h4>
+              <div class="price-line">
+                <span>Base Fare</span>
+                <span>{{ formatPrice(selectedOffer.pricing.supplierBaseFare, selectedOffer.pricing.currency) }}</span>
+              </div>
+              <div class="price-line">
+                <span>Taxes &amp; Fees</span>
+                <span>{{ formatPrice(selectedOffer.pricing.supplierTaxes, selectedOffer.pricing.currency) }}</span>
+              </div>
+              <div class="price-line">
+                <span>Service Fee</span>
+                <span>{{ formatPrice(selectedOffer.pricing.serviceFee, selectedOffer.pricing.currency) }}</span>
+              </div>
+              @if (selectedOffer.pricing.discount > 0) {
+                <div class="price-line text-success">
+                  <span>Discount</span>
+                  <span>-{{ formatPrice(selectedOffer.pricing.discount, selectedOffer.pricing.currency) }}</span>
+                </div>
+              }
+              <div class="price-line price-line--total">
+                <span>Total Fare</span>
+                <span>{{ formatPrice(selectedOffer.pricing.finalPrice, selectedOffer.pricing.currency) }}</span>
+              </div>
+            </div>
+
+            <div class="summary-footer">
+              <div class="meta-item">
+                <span class="meta-label">Refundable:</span>
+                <span class="meta-value">{{ selectedOffer.isRefundable ? 'Yes' : 'No' }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Baggage:</span>
+                <span class="meta-value">{{ selectedOffer.baggage.checkIn }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Cabin Class:</span>
+                <span class="meta-value badge badge-gray">{{ selectedOffer.segments[0].cabinClass }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</main>
