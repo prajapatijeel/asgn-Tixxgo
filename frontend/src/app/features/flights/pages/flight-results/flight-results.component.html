@@ -39,8 +39,8 @@
                 <strong>{{ formatPrice(selectedOffer.pricing.finalPrice, selectedOffer.pricing.currency) }}</strong>.
               </p>
               <div class="reval-actions mt-2">
-                <button class="btn btn-success" id="btn-proceed-travellers" disabled>
-                  Proceed to Traveller Details (Phase 2)
+                <button class="btn btn-success" id="btn-proceed-travellers" (click)="proceedToBooking()">
+                  Proceed to Traveller Details →
                 </button>
                 <button class="btn btn-secondary btn-sm" (click)="dismissRevalidation()">
                   Choose Different Flight
@@ -99,11 +99,11 @@
               } @else {
                 <div class="alert alert-success mt-2">
                   <span>✓</span>
-                  <span>New fare accepted. Ready for traveller details. (Phase 2 coming soon)</span>
+                  <span>New fare accepted. Ready for traveller details.</span>
                 </div>
                 <div class="reval-actions mt-1">
-                  <button class="btn btn-success" id="btn-proceed-after-accept" disabled>
-                    Proceed to Traveller Details (Phase 2)
+                  <button class="btn btn-success" id="btn-proceed-after-accept" (click)="proceedToBooking()">
+                    Proceed to Traveller Details →
                   </button>
                 </div>
               }

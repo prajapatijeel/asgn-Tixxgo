@@ -32,6 +32,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'booking/traveller',
+    loadComponent: () =>
+      import('./features/booking/pages/traveller/traveller.component').then(
+        (m) => m.TravellerComponent,
+      ),
+  },
+  {
+    path: 'booking/confirmation',
+    loadComponent: () =>
+      import('./features/booking/pages/confirmation/confirmation.component').then(
+        (m) => m.ConfirmationComponent,
+      ),
+  },
+  {
     // Catch-all: redirect unknown URLs back to search
     path: '**',
     redirectTo: 'flights/search',

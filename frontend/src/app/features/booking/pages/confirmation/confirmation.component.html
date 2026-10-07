@@ -1,0 +1,165 @@
+<app-header></app-header>
+
+<main class="confirmation-page">
+  <div class="container">
+
+    @if (booking) {
+
+      <!-- ── Success Header ──────────────────────────────────── -->
+      <div class="card confirmation-hero mb-4">
+        <div class="hero-icon">✓</div>
+        <h1 class="hero-title">Booking Confirmed!</h1>
+        <p class="hero-subtitle">Thank you for booking with Tixxgo. Your e-ticket reference is below.</p>
+
+        <div class="ref-badge-container mt-3">
+          <div class="ref-box">
+            <span class="ref-label">Booking Reference (Tixxgo PNR)</span>
+            <span class="ref-code">{{ booking.bookingRef }}</span>
+          </div>
+
+          @if (booking.supplierBooking?.pnr) {
+            <div class="ref-box ref-box--airline">
+              <span class="ref-label">Airline PNR ({{ booking.supplier }})</span>
+              <span class="ref-code">{{ booking.supplierBooking?.pnr }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="status-tags mt-3">
+          <span class="badge badge-green">Booking Status: {{ booking.bookingStatus }}</span>
+          <span class="badge badge-blue">Payment Status: {{ booking.paymentStatus }}</span>
+        </div>
+      </div>
+
+      <!-- ── Flight & Passenger Details ──────────────────────── -->
+      <div class="confirmation-grid">
+
+        <!-- Left: Flight & Passengers -->
+        <div class="details-col">
+
+          <!-- Flight Details Card -->
+          <div class="card mb-3">
+            <h2 class="card-title">Flight Itinerary</h2>
+
+            <div class="flight-detail-box">
+              <div class="flight-header">
+                <div>
+                  <span class="flight-num">{{ booking.flightNumber }}</span>
+                  <span class="badge badge-gray ml-2">{{ booking.supplier }}</span>
+                </div>
+                <span class="flight-date">{{ booking.departureTime | date: 'EEEE, d MMMM yyyy' }}</span>
+              </div>
+
+              <div class="route-display mt-3">
+                <div class="route-city">
+                  <span class="time">{{ booking.departureTime | date: 'HH:mm' }}</span>
+                  <span class="iata">{{ booking.origin }}</span>
+                </div>
+
+                <div class="route-visual">
+                  <span class="line"></span>
+                  <span class="plane">✈</span>
+                </div>
+
+                <div class="route-city text-right">
+                  <span class="time">{{ booking.arrivalTime | date: 'HH:mm' }}</span>
+                  <span class="iata">{{ booking.destination }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passenger Details Card -->
+          <div class="card mb-3">
+            <h2 class="card-title">Passengers</h2>
+
+            <div class="passengers-list">
+              @for (traveller of booking.travellers; track traveller.id) {
+                <div class="passenger-item">
+                  <div class="passenger-avatar">👤</div>
+                  <div class="passenger-info">
+                    <div class="passenger-name">{{ traveller.firstName }} {{ traveller.lastName }}</div>
+                    <div class="passenger-meta text-muted">
+                      DOB: {{ traveller.dateOfBirth | date: 'dd MMM yyyy' }}
+                      @if (traveller.passportNumber) {
+                        | Passport: {{ traveller.passportNumber }}
+                      }
+                      @if (traveller.nationality) {
+                        | Nationality: {{ traveller.nationality }}
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Pricing & Payment Summary -->
+        <div class="sidebar-col">
+
+          <div class="card mb-3">
+            <h3 class="summary-title">Payment Summary</h3>
+
+            <div class="price-breakdown">
+              <div class="price-line">
+                <span>Base Fare</span>
+                <span>{{ formatPrice(booking.supplierBaseFare, booking.currency) }}</span>
+              </div>
+              <div class="price-line">
+                <span>Taxes &amp; Fees</span>
+                <span>{{ formatPrice(booking.supplierTaxes, booking.currency) }}</span>
+              </div>
+              <div class="price-line">
+                <span>Service Fee</span>
+                <span>{{ formatPrice(booking.serviceFee, booking.currency) }}</span>
+              </div>
+              @if (booking.discount > 0) {
+                <div class="price-line text-success">
+                  <span>Discount</span>
+                  <span>-{{ formatPrice(booking.discount, booking.currency) }}</span>
+                </div>
+              }
+              <div class="price-line price-line--total">
+                <span>Total Paid</span>
+                <span>{{ formatPrice(booking.finalPrice, booking.currency) }}</span>
+              </div>
+            </div>
+
+            @if (booking.payment) {
+              <div class="payment-details mt-3">
+                <div class="meta-item">
+                  <span class="meta-label">Payment Method:</span>
+                  <span class="meta-value">{{ booking.payment.method }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Gateway Ref:</span>
+                  <span class="meta-value font-mono">{{ booking.payment.gatewayReference }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Paid At:</span>
+                  <span class="meta-value">{{ booking.payment.paidAt | date: 'medium' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="actions-box card">
+            <button class="btn btn-secondary btn-full mb-2" (click)="printItinerary()">
+              🖨 Print Itinerary
+            </button>
+            <button class="btn btn-primary btn-full" (click)="bookAnotherFlight()">
+              ✈ Book Another Flight
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+</main>

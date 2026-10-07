@@ -124,6 +124,12 @@ export class FlightResultsComponent implements OnInit {
     this.revalidatingOfferId = null;
   }
 
+  proceedToBooking(): void {
+    if (this.selectedOffer) {
+      this.router.navigate(['/booking/traveller']);
+    }
+  }
+
   goBackToSearch(): void {
     this.router.navigate(['/flights/search']);
   }
