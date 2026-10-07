@@ -42,4 +42,10 @@ export class ConfirmationComponent implements OnInit {
     this.bookingState.clearBooking();
     this.router.navigate(['/flights/search']);
   }
+
+  viewBooking(): void {
+    if (this.booking?.bookingRef) {
+      this.router.navigate(['/booking', this.booking.bookingRef]);
+    }
+  }
 }

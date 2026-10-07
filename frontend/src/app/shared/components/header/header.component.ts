@@ -20,9 +20,11 @@ import { RouterLink } from '@angular/router';
   `,
   styles: [`
     .app-header {
-      background: #fff;
-      border-bottom: 1px solid var(--color-border);
-      box-shadow: var(--shadow-sm);
+      background: rgba(13, 11, 30, 0.75);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -31,37 +33,44 @@ import { RouterLink } from '@angular/router';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
+      height: 64px;
     }
     .logo {
       display: flex;
       align-items: center;
-      gap: .5rem;
+      gap: 0.5rem;
       text-decoration: none;
-      color: var(--color-primary);
+      color: #c4b5fd;
+      transition: color 200ms ease;
     }
-    .logo-icon {
-      font-size: 1.4rem;
-    }
+    .logo:hover { color: #fff; }
+    .logo-icon { font-size: 1.4rem; }
     .logo-text {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -.5px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #c4b5fd, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .header-nav { display: flex; gap: 1rem; }
+    .header-nav { display: flex; gap: 0.5rem; }
     .nav-link {
-      font-size: .9375rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      color: var(--color-text-secondary);
+      color: rgba(240,238,255,0.65);
       text-decoration: none;
-      padding: .25rem .5rem;
-      border-radius: var(--radius-sm);
-      transition: color var(--transition), background var(--transition);
+      padding: 0.35rem 0.875rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
     }
     .nav-link:hover {
-      color: var(--color-primary);
-      background: var(--color-primary-light);
+      color: #fff;
+      background: rgba(108,99,255,0.2);
+      border-color: rgba(108,99,255,0.4);
     }
   `],
 })
 export class HeaderComponent {}
+

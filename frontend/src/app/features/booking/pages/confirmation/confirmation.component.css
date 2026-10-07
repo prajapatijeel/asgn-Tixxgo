@@ -1,23 +1,22 @@
 .confirmation-page {
-  padding: var(--spacing-xl) 0;
-  background-color: var(--color-bg);
-  min-height: calc(100vh - 72px);
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  min-height: calc(100vh - 64px);
 }
 
 .confirmation-hero {
   text-align: center;
   padding: var(--spacing-2xl) var(--spacing-lg);
-  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
-  border-color: #bbf7d0;
+  background: rgba(16,185,129,0.06);
+  border-color: rgba(16,185,129,0.25);
 }
 
 .hero-icon {
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
-  background-color: var(--color-success);
-  color: white;
-  font-size: 32px;
+  background: rgba(16,185,129,0.2);
+  color: #6ee7b7;
+  font-size: 34px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -28,11 +27,11 @@
 .hero-title {
   font-size: var(--font-size-2xl);
   font-weight: 800;
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
 }
 
 .hero-subtitle {
-  color: var(--color-gray-600);
+  color: var(--color-text-secondary);
   font-size: var(--font-size-md);
   margin-top: var(--spacing-xs);
 }
@@ -47,29 +46,29 @@
 .ref-box {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background: rgba(255,255,255,0.05);
   padding: var(--spacing-sm) var(--spacing-lg);
-  border: 1px solid var(--color-gray-300);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
 }
 
 .ref-box--airline {
-  border-color: var(--color-primary-300);
-  background-color: var(--color-primary-50);
+  border-color: rgba(108,99,255,0.35);
+  background: rgba(108,99,255,0.08);
 }
 
 .ref-label {
   font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-gray-500);
+  color: var(--color-text-muted);
 }
 
 .ref-code {
   font-size: var(--font-size-xl);
   font-weight: 800;
-  color: var(--color-primary-700);
+  color: #c4b5fd;
   letter-spacing: 0.05em;
 }
 
@@ -86,22 +85,21 @@
 }
 
 @media (max-width: 900px) {
-  .confirmation-grid {
-    grid-template-columns: 1fr;
-  }
+  .confirmation-grid { grid-template-columns: 1fr; }
 }
 
 .card-title {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-xs);
-  border-bottom: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .flight-detail-box {
-  background-color: var(--color-gray-50);
+  background: rgba(108,99,255,0.06);
+  border: 1px solid rgba(108,99,255,0.2);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
 }
@@ -115,12 +113,12 @@
 .flight-num {
   font-size: var(--font-size-md);
   font-weight: 700;
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
 }
 
 .flight-date {
   font-size: var(--font-size-sm);
-  color: var(--color-gray-600);
+  color: var(--color-text-muted);
 }
 
 .route-display {
@@ -137,13 +135,13 @@
 .route-city .time {
   font-size: var(--font-size-xl);
   font-weight: 800;
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
 }
 
 .route-city .iata {
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--color-primary-600);
+  color: #c4b5fd;
 }
 
 .route-visual {
@@ -156,53 +154,45 @@
 .route-visual .line {
   height: 2px;
   width: 100%;
-  background-color: var(--color-gray-300);
+  background-color: var(--color-border);
 }
 
 .route-visual .plane {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--color-gray-50);
+  background: transparent;
   padding: 0 6px;
-  color: var(--color-primary-500);
+  color: #c4b5fd;
 }
 
 .passengers-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .passenger-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-gray-200);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 
-.passenger-avatar {
-  font-size: 24px;
-}
-
-.passenger-name {
-  font-weight: 700;
-  color: var(--color-gray-900);
-}
-
-.passenger-meta {
-  font-size: var(--font-size-xs);
-}
+.passenger-avatar { font-size: 24px; }
+.passenger-name { font-weight: 700; color: var(--color-text-primary); }
+.passenger-meta { font-size: var(--font-size-xs); color: var(--color-text-muted); }
 
 .summary-title {
   font-size: var(--font-size-md);
   font-weight: 700;
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-xs);
-  border-bottom: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .price-line {
@@ -210,54 +200,37 @@
   justify-content: space-between;
   font-size: var(--font-size-sm);
   margin-bottom: 6px;
-  color: var(--color-gray-700);
+  color: var(--color-text-secondary);
 }
 
 .price-line--total {
   font-weight: 700;
   font-size: var(--font-size-md);
-  color: var(--color-gray-900);
+  color: var(--color-text-primary);
   padding-top: var(--spacing-xs);
-  border-top: 1px dashed var(--color-gray-300);
+  border-top: 1px dashed var(--color-border);
   margin-top: var(--spacing-xs);
 }
 
 .payment-details {
-  border-top: 1px solid var(--color-gray-200);
+  margin-top: var(--spacing-md);
   padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-size: var(--font-size-xs);
 }
 
-.meta-item {
-  display: flex;
-  justify-content: space-between;
-}
+.meta-item { display: flex; justify-content: space-between; }
+.meta-label { color: var(--color-text-muted); }
+.meta-value { font-weight: 500; color: var(--color-text-primary); }
+.font-mono { font-family: 'Courier New', monospace; }
 
-.meta-label {
-  color: var(--color-gray-500);
-}
-
-.meta-value {
-  font-weight: 500;
-  color: var(--color-gray-800);
-}
-
-.font-mono {
-  font-family: monospace;
-}
+.actions-box { display: flex; flex-direction: column; gap: 0; }
 
 @media print {
-  app-header, .actions-box, .btn {
-    display: none !important;
-  }
-  .confirmation-page {
-    padding: 0;
-    background: white;
-  }
-  .confirmation-grid {
-    grid-template-columns: 1fr;
-  }
+  app-header, .actions-box, .btn { display: none !important; }
+  .confirmation-page { padding: 0; background: white; }
+  .confirmation-grid { grid-template-columns: 1fr; }
 }

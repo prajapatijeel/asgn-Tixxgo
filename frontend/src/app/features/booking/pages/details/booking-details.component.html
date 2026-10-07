@@ -1,0 +1,372 @@
+<app-header></app-header>
+
+<main class="details-page">
+  <div class="container">
+
+    <!-- ── Loading ─────────────────────────────────────────── -->
+    @if (isLoading) {
+      <div class="loading-center">
+        <span class="spinner spinner-lg"></span>
+        <p>Loading booking details...</p>
+      </div>
+    }
+
+    <!-- ── Load Error ──────────────────────────────────────── -->
+    @if (!isLoading && loadError) {
+      <div class="error-state card text-center">
+        <div class="error-icon">✗</div>
+        <h2>Booking Not Found</h2>
+        <p>{{ loadError }}</p>
+        <button class="btn btn-primary mt-3" (click)="goBackToSearch()">← Search Flights</button>
+      </div>
+    }
+
+    <!-- ── Main Booking View ───────────────────────────────── -->
+    @if (!isLoading && booking) {
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Booking Details</h1>
+          <p class="page-subtitle">Reference: <span class="ref-inline">{{ booking.bookingRef }}</span></p>
+        </div>
+        <button class="btn btn-secondary btn-sm" (click)="goBackToSearch()">← Search Flights</button>
+      </div>
+
+      <!-- ── Status Summary Strip ──────────────────────────── -->
+      <div class="status-strip card mb-3">
+        <div class="status-item">
+          <span class="status-label">Booking Status</span>
+          <span class="status-pill {{ getBookingStatusClass(booking.bookingStatus) }}">
+            {{ getBookingStatusLabel(booking.bookingStatus) }}
+          </span>
+        </div>
+        <div class="status-divider"></div>
+        <div class="status-item">
+          <span class="status-label">Payment Status</span>
+          <span class="status-pill {{ getPaymentStatusClass(booking.paymentStatus) }}">
+            {{ getPaymentStatusLabel(booking.paymentStatus) }}
+          </span>
+        </div>
+        @if (booking.supplierBooking?.pnr) {
+          <div class="status-divider"></div>
+          <div class="status-item">
+            <span class="status-label">Airline PNR</span>
+            <span class="pnr-value">{{ booking.supplierBooking?.pnr }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- ── Refund / Special State Messages ───────────────── -->
+      @if (booking.paymentStatus === 'REFUND_PENDING') {
+        <div class="alert alert-warning mb-3" role="alert">
+          <span>⏳</span>
+          <div>
+            <strong>Refund Pending</strong>
+            <p class="mt-1">Your booking has been cancelled. Your refund is being processed and will be credited within 5–7 business days.</p>
+          </div>
+        </div>
+      }
+      @if (booking.paymentStatus === 'REFUNDED') {
+        <div class="alert alert-success mb-3" role="alert">
+          <span>✓</span>
+          <div>
+            <strong>Refund Completed</strong>
+            <p class="mt-1">Your refund has been successfully processed.</p>
+          </div>
+        </div>
+      }
+      @if (booking.bookingStatus === 'SUPPLIER_UNKNOWN') {
+        <div class="alert alert-warning mb-3" role="alert">
+          <span>🔄</span>
+          <div>
+            <strong>Booking Status Under Review</strong>
+            <p class="mt-1">We are still confirming your booking with the airline. Please check back shortly or contact support.</p>
+          </div>
+        </div>
+      }
+
+      <!-- ── Main Grid ───────────────────────────────────────── -->
+      <div class="details-grid">
+
+        <!-- Left Column: Flight + Passengers -->
+        <div class="details-main">
+
+          <!-- Flight Details -->
+          <div class="card mb-3">
+            <h2 class="section-title">✈ Flight Itinerary</h2>
+
+            <div class="flight-box">
+              <div class="flight-top">
+                <div>
+                  <span class="flight-num">{{ booking.flightNumber }}</span>
+                  <span class="badge badge-gray ml-2">{{ booking.supplier }}</span>
+                </div>
+                <span class="flight-date text-muted">
+                  {{ booking.departureTime | date: 'EEEE, d MMMM yyyy' }}
+                </span>
+              </div>
+
+              <div class="flight-route mt-3">
+                <div class="route-city">
+                  <span class="route-time">{{ booking.departureTime | date: 'HH:mm' }}</span>
+                  <span class="route-iata">{{ booking.origin }}</span>
+                </div>
+                <div class="route-line">
+                  <span class="route-dash"></span>
+                  <span class="route-plane">✈</span>
+                </div>
+                <div class="route-city route-city--right">
+                  <span class="route-time">{{ booking.arrivalTime | date: 'HH:mm' }}</span>
+                  <span class="route-iata">{{ booking.destination }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passengers -->
+          <div class="card mb-3">
+            <h2 class="section-title">👤 Passengers</h2>
+            <div class="passengers-list">
+              @for (traveller of booking.travellers; track traveller.id) {
+                <div class="passenger-row">
+                  <div class="passenger-avatar">👤</div>
+                  <div>
+                    <div class="passenger-name">{{ traveller.firstName }} {{ traveller.lastName }}</div>
+                    <div class="text-muted">
+                      DOB: {{ traveller.dateOfBirth | date: 'dd MMM yyyy' }}
+                      @if (traveller.passportNumber) { &nbsp;·&nbsp; Passport: {{ traveller.passportNumber }} }
+                      @if (traveller.nationality) { &nbsp;·&nbsp; Nationality: {{ traveller.nationality }} }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Supplier Booking Details -->
+          @if (booking.supplierBooking) {
+            <div class="card mb-3">
+              <h2 class="section-title">🔗 Supplier Booking</h2>
+              <div class="info-table">
+                <div class="info-row">
+                  <span class="info-label">Supplier</span>
+                  <span class="info-value">{{ booking.supplier }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Supplier Status</span>
+                  <span class="info-value">{{ booking.supplierBooking.status }}</span>
+                </div>
+                @if (booking.supplierBooking.pnr) {
+                  <div class="info-row">
+                    <span class="info-label">Airline PNR</span>
+                    <span class="info-value pnr-code">{{ booking.supplierBooking.pnr }}</span>
+                  </div>
+                }
+                @if (booking.supplierBooking.supplierBookingId) {
+                  <div class="info-row">
+                    <span class="info-label">Supplier Booking ID</span>
+                    <span class="info-value font-mono text-xs">{{ booking.supplierBooking.supplierBookingId }}</span>
+                  </div>
+                }
+                @if (booking.supplierBooking.cancellationId) {
+                  <div class="info-row">
+                    <span class="info-label">Cancellation ID</span>
+                    <span class="info-value font-mono text-xs">{{ booking.supplierBooking.cancellationId }}</span>
+                  </div>
+                }
+                @if (booking.supplierBooking.cancellationCharge !== null) {
+                  <div class="info-row">
+                    <span class="info-label">Cancellation Charge</span>
+                    <span class="info-value text-danger">
+                      {{ formatPrice(booking.supplierBooking.cancellationCharge!, booking.currency) }}
+                    </span>
+                  </div>
+                }
+                @if (booking.supplierBooking.refundAmount !== null) {
+                  <div class="info-row">
+                    <span class="info-label">Refund Amount</span>
+                    <span class="info-value text-success">
+                      {{ formatPrice(booking.supplierBooking.refundAmount!, booking.currency) }}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+        </div>
+
+        <!-- Right Column: Pricing + Actions -->
+        <div class="details-sidebar">
+
+          <!-- Fare Breakdown -->
+          <div class="card mb-3">
+            <h3 class="sidebar-title">💳 Payment Summary</h3>
+            <div class="price-list">
+              <div class="price-row">
+                <span>Base Fare</span>
+                <span>{{ formatPrice(booking.supplierBaseFare, booking.currency) }}</span>
+              </div>
+              <div class="price-row">
+                <span>Taxes &amp; Fees</span>
+                <span>{{ formatPrice(booking.supplierTaxes, booking.currency) }}</span>
+              </div>
+              <div class="price-row">
+                <span>Service Fee</span>
+                <span>{{ formatPrice(booking.serviceFee, booking.currency) }}</span>
+              </div>
+              @if (booking.discount > 0) {
+                <div class="price-row text-success">
+                  <span>Discount</span>
+                  <span>-{{ formatPrice(booking.discount, booking.currency) }}</span>
+                </div>
+              }
+              <div class="price-row price-row--total">
+                <span>Total Paid</span>
+                <span>{{ formatPrice(booking.finalPrice, booking.currency) }}</span>
+              </div>
+            </div>
+
+            @if (booking.payment) {
+              <div class="payment-meta">
+                <div class="info-row">
+                  <span class="info-label">Method</span>
+                  <span class="info-value">{{ booking.payment.method }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Gateway Ref</span>
+                  <span class="info-value font-mono text-xs">{{ booking.payment.gatewayReference }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Paid At</span>
+                  <span class="info-value">{{ booking.payment.paidAt | date: 'medium' }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- ── Cancellation Section ───────────────────────── -->
+
+          <!-- Idle: Show cancel button only for CONFIRMED -->
+          @if (cancellationStep === 'idle' && isCancellable()) {
+            <div class="card cancel-card">
+              <h3 class="sidebar-title">Cancel Booking</h3>
+              <p class="text-muted mb-2">You may cancel this confirmed booking. Cancellation charges will be shown before you confirm.</p>
+              <button
+                class="btn btn-danger btn-full"
+                id="btn-cancel-booking"
+                (click)="startCancellation()"
+              >
+                🗑 Cancel This Booking
+              </button>
+            </div>
+          }
+
+          <!-- Loading preview -->
+          @if (cancellationStep === 'loading-preview') {
+            <div class="card cancel-card">
+              <div class="loading-center">
+                <span class="spinner"></span>
+                <p>Calculating cancellation charges...</p>
+              </div>
+            </div>
+          }
+
+          <!-- Preview: Show charges before confirm -->
+          @if (cancellationStep === 'preview' && cancellationPreview) {
+            <div class="card cancel-preview-card">
+              <h3 class="sidebar-title warning-title">⚠ Cancellation Preview</h3>
+              <p class="text-muted mb-2">Review the financial impact before confirming cancellation.</p>
+
+              <div class="preview-amounts">
+                <div class="preview-row">
+                  <span>Original Booking Amount</span>
+                  <span>{{ formatPrice(booking.finalPrice, booking.currency) }}</span>
+                </div>
+                <div class="preview-row text-danger">
+                  <span>Supplier Cancellation Charge</span>
+                  <span>-{{ formatPrice(cancellationPreview.cancellationCharge, cancellationPreview.currency) }}</span>
+                </div>
+                @if (cancellationPreview.tixxgoFee > 0) {
+                  <div class="preview-row text-danger">
+                    <span>Tixxgo Fee</span>
+                    <span>-{{ formatPrice(cancellationPreview.tixxgoFee, cancellationPreview.currency) }}</span>
+                  </div>
+                }
+                <div class="preview-row preview-row--refund">
+                  <span>Estimated Refund</span>
+                  <span class="text-success fw-700">{{ formatPrice(cancellationPreview.estimatedRefund, cancellationPreview.currency) }}</span>
+                </div>
+              </div>
+
+              <p class="preview-question">Do you want to cancel this booking?</p>
+
+              <div class="preview-actions">
+                <button
+                  class="btn btn-secondary btn-full"
+                  id="btn-keep-booking"
+                  (click)="keepBooking()"
+                >
+                  ✓ Keep My Booking
+                </button>
+                <button
+                  class="btn btn-danger btn-full"
+                  id="btn-confirm-cancel"
+                  (click)="confirmCancellation()"
+                >
+                  Confirm Cancellation
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Confirming in progress -->
+          @if (cancellationStep === 'confirming') {
+            <div class="card cancel-card">
+              <div class="loading-center">
+                <span class="spinner"></span>
+                <p>Cancelling booking with airline...</p>
+              </div>
+            </div>
+          }
+
+          <!-- Done: Cancellation successful -->
+          @if (cancellationStep === 'done') {
+            <div class="card cancel-done-card">
+              <div class="done-icon">✓</div>
+              <h3 class="done-title">Booking Cancelled</h3>
+              <p class="text-muted mt-1">
+                @if (booking.paymentStatus === 'REFUND_PENDING') {
+                  Your refund is being processed. It may take 5–7 business days.
+                } @else if (booking.paymentStatus === 'REFUNDED') {
+                  Your refund has been completed.
+                } @else {
+                  Cancellation complete.
+                }
+              </p>
+            </div>
+          }
+
+          <!-- Error -->
+          @if (cancellationStep === 'error' && cancellationError) {
+            <div class="card cancel-card">
+              <div class="alert alert-danger">
+                <span>⚠</span>
+                <div>
+                  <strong>Cancellation Failed</strong>
+                  <p>{{ cancellationError }}</p>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-full mt-2" (click)="keepBooking()">
+                ← Back to Booking
+              </button>
+            </div>
+          }
+
+        </div>
+      </div>
+    }
+
+  </div>
+</main>

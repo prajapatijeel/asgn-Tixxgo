@@ -152,3 +152,66 @@ export interface BookingApiResponse {
   data: Booking;
   message?: string;
 }
+
+// ── Phase 3: Cancellation ─────────────────────────────────────────────
+
+/**
+ * Request body for POST /api/bookings/:id/cancel
+ * Backend DTO: CancelBookingDto — only `reason` is accepted, it is optional.
+ */
+export interface CancelBookingRequest {
+  reason?: string;
+}
+
+/**
+ * Response from GET /api/bookings/:id/cancel-preview
+ * All amounts are calculated by the backend — Angular only displays them.
+ */
+export interface CancellationPreview {
+  cancellationCharge: number;
+  tixxgoFee: number;
+  estimatedRefund: number;
+  currency: string;
+}
+
+/**
+ * API response wrapper for the cancellation preview endpoint.
+ */
+export interface CancellationPreviewApiResponse {
+  success: boolean;
+  data: CancellationPreview;
+  message?: string;
+}
+
+/**
+ * Booking statuses that allow the "Cancel Booking" button to appear.
+ * Only CONFIRMED bookings can be cancelled per backend business rule.
+ */
+export const CANCELLABLE_STATUSES: BookingStatus[] = ['CONFIRMED'];
+
+/**
+ * Helper: Returns a user-friendly label for each BookingStatus.
+ * Angular never invents a status — this map only labels what the backend sends.
+ */
+export const BOOKING_STATUS_LABELS: Record<BookingStatus, string> = {
+  PENDING:                 'Processing',
+  PAYMENT_RECEIVED:        'Payment Received',
+  SUPPLIER_BOOKING:        'Confirming with Airline...',
+  SUPPLIER_UNKNOWN:        'Booking status is being checked with the airline.',
+  CONFIRMED:               'Booking Confirmed',
+  FAILED:                  'Booking Failed',
+  CANCELLATION_REQUESTED:  'Cancellation in Progress',
+  CANCELLED:               'Booking Cancelled',
+};
+
+/**
+ * Helper: Returns a user-friendly label for each PaymentStatus.
+ */
+export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
+  PENDING:        'Pending',
+  SUCCESS:        'Payment Successful',
+  FAILED:         'Payment Failed',
+  REFUND_PENDING: 'Refund Pending — your refund is being processed.',
+  REFUNDED:       'Refund Completed',
+};
+

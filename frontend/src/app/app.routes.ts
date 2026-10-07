@@ -31,6 +31,10 @@ export const routes: Routes = [
         (m) => m.FlightResultsComponent,
       ),
   },
+  // ── Booking flow ──────────────────────────────────────────────────────
+  // IMPORTANT: specific paths (traveller, confirmation) MUST come before
+  // the parameterised route (:bookingRef) or Angular will match them as
+  // a bookingRef value instead of the intended component.
   {
     path: 'booking/traveller',
     loadComponent: () =>
@@ -46,8 +50,17 @@ export const routes: Routes = [
       ),
   },
   {
+    // Dynamic route — must come AFTER static booking/* routes
+    path: 'booking/:bookingRef',
+    loadComponent: () =>
+      import('./features/booking/pages/details/booking-details.component').then(
+        (m) => m.BookingDetailsComponent,
+      ),
+  },
+  {
     // Catch-all: redirect unknown URLs back to search
     path: '**',
     redirectTo: 'flights/search',
   },
 ];
+
