@@ -1,4 +1,4 @@
-ÿþ# Tixxgo â€” Flight Booking Platform
+# Tixxgo â€” Flight Booking Platform
 
 Tixxgo is a supplier-independent flight-booking platform built as a full-stack assessment project. It demonstrates flight search, supplier response normalization, pricing, fare revalidation, traveller details, booking, payment recording, supplier confirmation, reconciliation, cancellation, and refund-pending workflows.
 
