@@ -1,0 +1,134 @@
+<app-header></app-header>
+
+<main class="search-page">
+  <div class="hero">
+    <div class="container">
+      <h1 class="hero-title">Find Your Perfect Flight</h1>
+      <p class="hero-subtitle">Search hundreds of flights and book with confidence.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="search-card card">
+      <h2 class="search-card__heading">Search Flights</h2>
+
+      <!-- Error Alert -->
+      @if (errorMessage) {
+        <div class="alert alert-danger mb-2" role="alert">
+          <span>⚠</span>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+
+      <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-row">
+
+          <!-- Origin -->
+          <div class="form-group">
+            <label class="form-label" for="origin">From (IATA Code)</label>
+            <input
+              id="origin"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('origin')"
+              formControlName="origin"
+              placeholder="e.g. AMD"
+              maxlength="5"
+              autocomplete="off"
+            />
+            @if (isFieldInvalid('origin')) {
+              <span class="form-error">Origin airport code is required.</span>
+            }
+          </div>
+
+          <!-- Destination -->
+          <div class="form-group">
+            <label class="form-label" for="destination">To (IATA Code)</label>
+            <input
+              id="destination"
+              type="text"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('destination')"
+              formControlName="destination"
+              placeholder="e.g. DEL"
+              maxlength="5"
+              autocomplete="off"
+            />
+            @if (isFieldInvalid('destination')) {
+              <span class="form-error">Destination airport code is required.</span>
+            }
+          </div>
+
+          <!-- Departure Date -->
+          <div class="form-group">
+            <label class="form-label" for="departureDate">Departure Date</label>
+            <input
+              id="departureDate"
+              type="date"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('departureDate')"
+              formControlName="departureDate"
+            />
+            @if (isFieldInvalid('departureDate')) {
+              <span class="form-error">Departure date is required.</span>
+            }
+          </div>
+
+          <!-- Adults -->
+          <div class="form-group form-group--sm">
+            <label class="form-label" for="adults">Adults</label>
+            <input
+              id="adults"
+              type="number"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('adults')"
+              formControlName="adults"
+              min="1"
+              max="9"
+            />
+            @if (isFieldInvalid('adults')) {
+              <span class="form-error">Minimum 1 adult required.</span>
+            }
+          </div>
+
+          <!-- Cabin Class -->
+          <div class="form-group">
+            <label class="form-label" for="cabinClass">Cabin Class</label>
+            <select
+              id="cabinClass"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('cabinClass')"
+              formControlName="cabinClass"
+            >
+              @for (cls of cabinClasses; track cls.value) {
+                <option [value]="cls.value">{{ cls.label }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('cabinClass')) {
+              <span class="form-error">Please select a cabin class.</span>
+            }
+          </div>
+
+        </div>
+
+        <!-- Submit -->
+        <div class="search-actions">
+          <button
+            id="btn-search-flights"
+            type="submit"
+            class="btn btn-primary btn-lg"
+            [disabled]="isLoading"
+          >
+            @if (isLoading) {
+              <span class="spinner"></span>
+              <span>Searching...</span>
+            } @else {
+              <span>🔍 Search Flights</span>
+            }
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>

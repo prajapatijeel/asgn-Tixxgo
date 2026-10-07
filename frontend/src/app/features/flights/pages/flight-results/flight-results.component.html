@@ -1,0 +1,225 @@
+<app-header></app-header>
+
+<main class="results-page">
+  <div class="container">
+
+    <!-- ── Page Header ───────────────────────────────────── -->
+    <div class="results-header">
+      <div>
+        <h1 class="results-title">Available Flights</h1>
+        @if (offers.length > 0) {
+          <p class="results-subtitle">{{ offers.length }} flight{{ offers.length === 1 ? '' : 's' }} found</p>
+        }
+      </div>
+      <button class="btn btn-secondary btn-sm" (click)="goBackToSearch()">
+        ← Modify Search
+      </button>
+    </div>
+
+    <!-- ── Revalidation API error ────────────────────────── -->
+    @if (revalidationError) {
+      <div class="alert alert-danger mb-2" role="alert">
+        <span>⚠</span>
+        <span>{{ revalidationError }}</span>
+      </div>
+    }
+
+    <!-- ── Revalidation Result Panel ─────────────────────── -->
+    @if (revalidationState && selectedOffer) {
+      <div id="revalidation-panel" class="revalidation-panel card">
+
+        <!-- PRICE_CONFIRMED -->
+        @if (revalidationState.status === 'PRICE_CONFIRMED') {
+          <div class="reval-confirmed">
+            <div class="reval-icon reval-icon--success">✓</div>
+            <div>
+              <h3 class="reval-title">Fare Confirmed</h3>
+              <p>Great news! The fare for
+                <strong>{{ selectedOffer.segments[0].flightNumber }}</strong> is confirmed at
+                <strong>{{ formatPrice(selectedOffer.pricing.finalPrice, selectedOffer.pricing.currency) }}</strong>.
+              </p>
+              <div class="reval-actions mt-2">
+                <button class="btn btn-success" id="btn-proceed-travellers" disabled>
+                  Proceed to Traveller Details (Phase 2)
+                </button>
+                <button class="btn btn-secondary btn-sm" (click)="dismissRevalidation()">
+                  Choose Different Flight
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- PRICE_CHANGED -->
+        @if (revalidationState.status === 'PRICE_CHANGED') {
+          <div class="reval-changed">
+            <div class="reval-icon reval-icon--warning">!</div>
+            <div class="reval-content">
+              <h3 class="reval-title">Fare Has Changed</h3>
+              <p>The fare for <strong>{{ selectedOffer.segments[0].flightNumber }}</strong> has been updated by the airline.</p>
+
+              <div class="price-comparison">
+                <div class="price-item price-item--old">
+                  <span class="price-label">Previous Price</span>
+                  <span class="price-value price-value--strikethrough">
+                    {{ formatPrice(revalidationState.response.originalFinalPrice!, selectedOffer.pricing.currency) }}
+                  </span>
+                </div>
+                <div class="price-arrow">→</div>
+                <div class="price-item price-item--new">
+                  <span class="price-label">New Price</span>
+                  <span class="price-value price-value--highlight">
+                    {{ formatPrice(revalidationState.response.newFinalPrice!, selectedOffer.pricing.currency) }}
+                  </span>
+                </div>
+                <div class="price-item price-item--diff">
+                  <span class="price-label">Difference</span>
+                  <span class="price-value text-warning">
+                    +{{ formatPrice(revalidationState.response.priceDifference!, selectedOffer.pricing.currency) }}
+                  </span>
+                </div>
+              </div>
+
+              @if (!revalidationState.priceAccepted) {
+                <p class="reval-note">
+                  You must explicitly accept the updated fare to continue.
+                </p>
+                <div class="reval-actions">
+                  <button
+                    class="btn btn-primary"
+                    id="btn-accept-price"
+                    (click)="acceptPriceChange()"
+                  >
+                    Accept New Fare &amp; Continue
+                  </button>
+                  <button class="btn btn-secondary btn-sm" (click)="dismissRevalidation()">
+                    Choose Different Flight
+                  </button>
+                </div>
+              } @else {
+                <div class="alert alert-success mt-2">
+                  <span>✓</span>
+                  <span>New fare accepted. Ready for traveller details. (Phase 2 coming soon)</span>
+                </div>
+                <div class="reval-actions mt-1">
+                  <button class="btn btn-success" id="btn-proceed-after-accept" disabled>
+                    Proceed to Traveller Details (Phase 2)
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- FLIGHT_UNAVAILABLE -->
+        @if (revalidationState.status === 'FLIGHT_UNAVAILABLE') {
+          <div class="reval-unavailable">
+            <div class="reval-icon reval-icon--danger">✗</div>
+            <div>
+              <h3 class="reval-title">Flight No Longer Available</h3>
+              <p>Unfortunately, this flight is no longer available. Please choose a different option or search again.</p>
+              <div class="reval-actions mt-2">
+                <button class="btn btn-primary" (click)="goBackToSearch()">
+                  ← Back to Search
+                </button>
+                <button class="btn btn-secondary btn-sm" (click)="dismissRevalidation()">
+                  Choose Different Flight
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+
+    <!-- ── Empty State ────────────────────────────────────── -->
+    @if (offers.length === 0) {
+      <div class="empty-state card">
+        <div class="empty-icon">✈</div>
+        <h2>No Flights Found</h2>
+        <p>We couldn't find any flights for your search. Try different dates or airports.</p>
+        <button class="btn btn-primary mt-2" (click)="goBackToSearch()">
+          ← Back to Search
+        </button>
+      </div>
+    }
+
+    <!-- ── Flight Cards ───────────────────────────────────── -->
+    @for (offer of offers; track offer.offerId) {
+      <div class="flight-card card" [class.flight-card--selected]="selectedOffer?.offerId === offer.offerId">
+
+        <!-- Left: Airline & Flight Info -->
+        <div class="flight-card__main">
+          <div class="airline-info">
+            <div class="airline-code-badge">{{ offer.segments[0].airlineCode }}</div>
+            <div>
+              <div class="airline-name">{{ offer.segments[0].airline }}</div>
+              <div class="flight-number text-muted">{{ offer.segments[0].flightNumber }}</div>
+            </div>
+          </div>
+
+          <!-- Route & Times -->
+          <div class="route">
+            <div class="route-point">
+              <span class="route-time">{{ offer.segments[0].departureTime | date: 'HH:mm' }}</span>
+              <span class="route-iata">{{ offer.segments[0].origin }}</span>
+            </div>
+            <div class="route-middle">
+              <span class="route-duration">{{ offer.segments[0].duration }}</span>
+              <div class="route-line">
+                <span class="route-dot"></span>
+                <span class="route-bar"></span>
+                <span class="route-arrow">✈</span>
+              </div>
+              <span class="route-class text-muted">{{ offer.segments[0].cabinClass }}</span>
+            </div>
+            <div class="route-point">
+              <span class="route-time">{{ offer.segments[0].arrivalTime | date: 'HH:mm' }}</span>
+              <span class="route-iata">{{ offer.segments[0].destination }}</span>
+            </div>
+          </div>
+
+          <!-- Meta Badges -->
+          <div class="flight-meta">
+            <span class="badge" [class.badge-green]="offer.isRefundable" [class.badge-red]="!offer.isRefundable">
+              {{ offer.isRefundable ? 'Refundable' : 'Non-refundable' }}
+            </span>
+            <span class="badge badge-blue">{{ offer.seatsAvailable }} seats left</span>
+            <span class="text-muted">🧳 Check-in: {{ offer.baggage.checkIn }}</span>
+            <span class="text-muted">💼 Cabin: {{ offer.baggage.cabin }}</span>
+          </div>
+        </div>
+
+        <!-- Right: Price & CTA -->
+        <div class="flight-card__price">
+          <div class="price-final">
+            {{ formatPrice(offer.pricing.finalPrice, offer.pricing.currency) }}
+          </div>
+          <div class="price-breakdown text-muted">
+            per person
+          </div>
+
+          <!-- Loading state for this card while revalidating -->
+          @if (revalidatingOfferId === offer.offerId) {
+            <div class="d-flex align-center gap-1 reval-loading">
+              <span class="spinner"></span>
+              <span class="text-muted">Checking fare...</span>
+            </div>
+          } @else {
+            <button
+              class="btn btn-primary btn-full"
+              [id]="'btn-select-' + offer.offerId"
+              (click)="selectFlight(offer)"
+              [disabled]="!!revalidatingOfferId"
+            >
+              Select Flight
+            </button>
+          }
+        </div>
+
+      </div>
+    }
+
+  </div>
+</main>
