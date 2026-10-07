@@ -48,4 +48,26 @@ export class ConfirmationComponent implements OnInit {
       this.router.navigate(['/booking', this.booking.bookingRef]);
     }
   }
+
+  get isSupplierConfirmationPending(): boolean {
+    return this.booking?.bookingStatus === 'SUPPLIER_UNKNOWN';
+  }
+
+  get heroTitle(): string {
+    return this.isSupplierConfirmationPending
+      ? 'Booking Status Pending'
+      : 'Booking Confirmed!';
+  }
+
+  get heroSubtitle(): string {
+    return this.isSupplierConfirmationPending
+      ? 'Your payment was received. We are confirming your booking with the airline and will update the status shortly.'
+      : 'Thank you for booking with Tixxgo. Your e-ticket reference is below.';
+  }
+
+  get bookingReferenceLabel(): string {
+    return this.isSupplierConfirmationPending
+      ? 'Tixxgo Booking Reference'
+      : 'Booking Reference (Tixxgo PNR)';
+  }
 }

@@ -10,6 +10,11 @@
   border-color: rgba(16,185,129,0.25);
 }
 
+.confirmation-hero--pending {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
 .hero-icon {
   width: 68px;
   height: 68px;
@@ -22,6 +27,13 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--spacing-md);
+}
+
+.hero-icon--pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  font-size: 24px;
+  letter-spacing: 0.12em;
 }
 
 .hero-title {

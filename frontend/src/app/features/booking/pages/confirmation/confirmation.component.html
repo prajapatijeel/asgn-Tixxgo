@@ -6,14 +6,16 @@
     @if (booking) {
 
       <!-- ── Success Header ──────────────────────────────────── -->
-      <div class="card confirmation-hero mb-4">
-        <div class="hero-icon">✓</div>
-        <h1 class="hero-title">Booking Confirmed!</h1>
-        <p class="hero-subtitle">Thank you for booking with Tixxgo. Your e-ticket reference is below.</p>
+      <div class="card confirmation-hero mb-4" [class.confirmation-hero--pending]="isSupplierConfirmationPending">
+        <div class="hero-icon" [class.hero-icon--pending]="isSupplierConfirmationPending">
+          {{ isSupplierConfirmationPending ? '...' : '✓' }}
+        </div>
+        <h1 class="hero-title">{{ heroTitle }}</h1>
+        <p class="hero-subtitle">{{ heroSubtitle }}</p>
 
         <div class="ref-badge-container mt-3">
           <div class="ref-box">
-            <span class="ref-label">Booking Reference (Tixxgo PNR)</span>
+            <span class="ref-label">{{ bookingReferenceLabel }}</span>
             <span class="ref-code">{{ booking.bookingRef }}</span>
           </div>
 
@@ -26,7 +28,9 @@
         </div>
 
         <div class="status-tags mt-3">
-          <span class="badge badge-green">Booking Status: {{ booking.bookingStatus }}</span>
+          <span class="badge" [class.badge-orange]="isSupplierConfirmationPending" [class.badge-green]="!isSupplierConfirmationPending">
+            Booking Status: {{ booking.bookingStatus }}
+          </span>
           <span class="badge badge-blue">Payment Status: {{ booking.paymentStatus }}</span>
         </div>
       </div>
@@ -150,9 +154,11 @@
             <button class="btn btn-primary btn-full mb-2" id="btn-view-booking" (click)="viewBooking()">
               📋 View Booking Details
             </button>
-            <button class="btn btn-secondary btn-full mb-2" (click)="printItinerary()">
-              🖨 Print Itinerary
-            </button>
+            @if (!isSupplierConfirmationPending) {
+              <button class="btn btn-secondary btn-full mb-2" (click)="printItinerary()">
+                🖨 Print Itinerary
+              </button>
+            }
             <button class="btn btn-secondary btn-full" (click)="bookAnotherFlight()">
               ✈ Book Another Flight
             </button>
