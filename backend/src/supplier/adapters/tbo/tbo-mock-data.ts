@@ -173,23 +173,37 @@ export function generateMockTboResults(params: SearchFlightsDto): TboFlightOptio
 export function mockTboRevalidate(
   resultIndex: string,
 ): { IsValid: boolean; Fare: TboFare } {
-  // Simulate a price increase on the second result (demonstrates PRICE_CHANGED)
-  if (resultIndex.includes('-002')) {
+
+  // First flight: ₹6,249 → ₹6,449
+  if (resultIndex.includes('-001')) {
     return {
       IsValid: true,
-      Fare: { BaseFare: 4400, Tax: 820, Currency: 'INR' }, // price went up
+      Fare: {
+        BaseFare: 5400,
+        Tax: 950,
+        Currency: 'INR',
+      },
     };
   }
 
-  // For other results, price is the same as search
-  const baseFareMap: Record<string, number> = {};
-  const taxMap: Record<string, number> = {};
+  // Second flight: ₹5,019 → ₹5,319
+  if (resultIndex.includes('-002')) {
+    return {
+      IsValid: true,
+      Fare: {
+        BaseFare: 4400,
+        Tax: 820,
+        Currency: 'INR',
+      },
+    };
+  }
 
+  // Third flight: price stays the same
   return {
     IsValid: true,
     Fare: {
-      BaseFare: baseFareMap[resultIndex] ?? 5200,
-      Tax: taxMap[resultIndex] ?? 950,
+      BaseFare: 3800,
+      Tax: 750,
       Currency: 'INR',
     },
   };

@@ -106,7 +106,20 @@ export class BookingsService {
       );
     }
 
-    // Step 3: Validate traveller count
+    // Step 3: Server-side Revalidation & Price Acceptance Enforcement
+    if (!offer.isRevalidated) {
+      throw new BadRequestException(
+        'Flight offer must be revalidated before booking. Please revalidate the flight fare first.',
+      );
+    }
+
+    if (offer.requiresPriceAcceptance && dto.acceptedPriceChange !== true) {
+      throw new BadRequestException(
+        'Flight fare has changed. You must explicitly accept the updated price before completing the booking.',
+      );
+    }
+
+    // Step 4: Validate traveller count
     if (dto.travellers.length < 1) {
       throw new BadRequestException('At least one traveller is required');
     }

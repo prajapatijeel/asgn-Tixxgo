@@ -161,10 +161,14 @@ export class FlightsService {
         `Price changed for offer ${dto.offerId}: ${originalFinalPrice} → ${newFinalPrice}`,
       );
 
-      // Update cached offer with new pricing (customer must acknowledge)
+      // Update cached offer with new pricing (requires explicit customer price acceptance)
       const updatedOffer: FlightOffer = {
         ...cachedOffer,
         pricing: newPricing,
+        isRevalidated: true,
+        revalidatedAt: new Date(),
+        requiresPriceAcceptance: true,
+        previousFinalPrice: originalFinalPrice,
       };
       this.offerCache.set(dto.offerId, updatedOffer);
 
@@ -180,6 +184,15 @@ export class FlightsService {
     }
 
     this.logger.log(`Price confirmed for offer ${dto.offerId}: ₹${newFinalPrice}`);
+
+    // Update cached offer as confirmed revalidated
+    const confirmedOffer: FlightOffer = {
+      ...cachedOffer,
+      isRevalidated: true,
+      revalidatedAt: new Date(),
+      requiresPriceAcceptance: false,
+    };
+    this.offerCache.set(dto.offerId, confirmedOffer);
 
     return {
       offerId: dto.offerId,
@@ -230,6 +243,8 @@ export class FlightsService {
       },
       isRefundable: result.isRefundable,
       seatsAvailable: result.seatsAvailable,
+      isRevalidated: false,
+      requiresPriceAcceptance: false,
     };
   }
 }

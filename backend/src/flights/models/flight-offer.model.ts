@@ -72,6 +72,12 @@ export interface FlightOffer {
   baggage: BaggageInfo;
   isRefundable: boolean;
   seatsAvailable: number;
+
+  /** Server-side fare revalidation tracking */
+  isRevalidated?: boolean;
+  revalidatedAt?: Date;
+  requiresPriceAcceptance?: boolean;
+  previousFinalPrice?: number;
 }
 
 /**

@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsEmail,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -139,4 +140,12 @@ export class CreateBookingDto {
   })
   @IsEnum(PaymentMethod)
   paymentMethod!: PaymentMethod;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Explicit customer acceptance of price change if fare changed during revalidation',
+  })
+  @IsOptional()
+  @IsBoolean()
+  acceptedPriceChange?: boolean;
 }
