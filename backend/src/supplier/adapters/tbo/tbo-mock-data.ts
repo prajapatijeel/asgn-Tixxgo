@@ -214,13 +214,23 @@ export function mockTboRevalidate(
  */
 export function mockTboBook(
   resultIndex: string,
-  _travellers: unknown[],
+  travellers: any[] = [],
 ): {
   PNR: string;
   BookingId: string;
   Status: string;
   TicketNumbers: string[];
 } {
+  const hasTimeoutTrigger = Array.isArray(travellers) && travellers.some(
+    (t) =>
+      (typeof t?.firstName === 'string' && t.firstName.toUpperCase() === 'TIMEOUT') ||
+      (typeof t?.lastName === 'string' && t.lastName.toUpperCase() === 'TIMEOUT'),
+  );
+
+  if (hasTimeoutTrigger) {
+    throw new Error('Supplier request timed out ETIMEDOUT');
+  }
+
   return {
     PNR: `PNR${Math.floor(Math.random() * 900000) + 100000}`,
     BookingId: `TBO-BK-${Date.now()}`,
