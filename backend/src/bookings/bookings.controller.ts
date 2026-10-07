@@ -14,12 +14,14 @@ import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { CancelBookingDto } from './dto/cancel-booking.dto';
 import { ApiResponse } from '../common/models/api-response.model';
+import { BookingSummary } from './models/booking-summary.model';
 
 /**
  * BookingsController — thin HTTP layer for booking operations.
  *
  * Endpoints:
  * POST   /api/bookings                          Create a booking
+ * GET    /api/bookings                          List booking summaries
  * GET    /api/bookings/:ref                     Get booking by reference
  * POST   /api/bookings/:id/cancel              Cancel a confirmed booking
  * GET    /api/bookings/:id/cancel-preview      Get cancellation charges
@@ -30,6 +32,22 @@ import { ApiResponse } from '../common/models/api-response.model';
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'List all bookings',
+    description:
+      'Return customer-safe booking summaries ordered newest first. This assessment endpoint is unauthenticated and returns the available booking records.',
+  })
+  @SwaggerResponse({
+    status: 200,
+    description: 'Booking summaries retrieved successfully. Returns an empty array when no bookings exist.',
+  })
+  async getBookings(): Promise<ApiResponse<BookingSummary[]>> {
+    const bookings = await this.bookingsService.getBookings();
+    return new ApiResponse(bookings, `Found ${bookings.length} booking(s)`);
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

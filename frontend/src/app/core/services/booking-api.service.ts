@@ -7,6 +7,7 @@ import {
   BookingApiResponse,
   CancelBookingRequest,
   CancellationPreviewApiResponse,
+  BookingListApiResponse,
 } from '../models/booking.models';
 
 @Injectable({ providedIn: 'root' })
@@ -35,6 +36,11 @@ export class BookingApiService {
     return this.http.get<BookingApiResponse>(
       `${this.baseUrl}/api/bookings/${ref}`,
     );
+  }
+
+  /** GET /api/bookings - demo/admin list of the bookings currently available. */
+  getBookings(): Observable<BookingListApiResponse> {
+    return this.http.get<BookingListApiResponse>(`${this.baseUrl}/api/bookings`);
   }
 
   /**

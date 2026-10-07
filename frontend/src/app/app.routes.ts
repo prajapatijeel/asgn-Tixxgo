@@ -50,6 +50,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'bookings',
+    loadComponent: () =>
+      import('./features/booking/pages/my-bookings/my-bookings.component').then(
+        (m) => m.MyBookingsComponent,
+      ),
+  },
+  {
     // Dynamic route — must come AFTER static booking/* routes
     path: 'booking/:bookingRef',
     loadComponent: () =>

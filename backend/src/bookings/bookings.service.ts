@@ -17,6 +17,7 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { CancelBookingDto } from './dto/cancel-booking.dto';
 import { FlightsService } from '../flights/flights.service';
 import { SupplierGateway } from '../supplier/supplier-gateway.service';
+import { BookingSummary } from './models/booking-summary.model';
 
 /**
  * BookingService — the core of the booking lifecycle.
@@ -71,6 +72,41 @@ export class BookingsService {
     private readonly supplierGateway: SupplierGateway,
     private readonly sequelize: Sequelize,
   ) {}
+
+  /**
+   * Return customer-safe booking summaries, newest first.
+   *
+   * This assessment has no authentication, so the endpoint returns all
+   * available bookings. Once customer identity exists, ownership filtering
+   * belongs in this method before querying the database.
+   */
+  async getBookings(): Promise<BookingSummary[]> {
+    try {
+      const bookings = await this.bookingModel.findAll({
+        attributes: [
+          'id',
+          'bookingRef',
+          'supplier',
+          'flightNumber',
+          'origin',
+          'destination',
+          'departureTime',
+          'arrivalTime',
+          'finalPrice',
+          'currency',
+          'paymentStatus',
+          'bookingStatus',
+          'createdAt',
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      return bookings.map((booking) => this.toBookingSummary(booking));
+    } catch (error) {
+      this.logger.error('Failed to retrieve bookings', error);
+      throw new InternalServerErrorException('Unable to retrieve bookings. Please try again.');
+    }
+  }
 
   /**
    * Create a booking.
@@ -536,5 +572,23 @@ export class BookingsService {
   private generateBookingRef(): string {
     const num = Math.floor(100000 + Math.random() * 900000);
     return `TXG-${num}`;
+  }
+
+  private toBookingSummary(booking: BookingEntity): BookingSummary {
+    return {
+      id: booking.id,
+      bookingRef: booking.bookingRef,
+      supplier: booking.supplier,
+      flightNumber: booking.flightNumber,
+      origin: booking.origin,
+      destination: booking.destination,
+      departureTime: booking.departureTime,
+      arrivalTime: booking.arrivalTime,
+      finalPrice: booking.finalPrice,
+      currency: booking.currency,
+      paymentStatus: booking.paymentStatus,
+      bookingStatus: booking.bookingStatus,
+      createdAt: booking.createdAt,
+    };
   }
 }

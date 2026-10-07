@@ -1,0 +1,89 @@
+<app-header></app-header>
+
+<main class="bookings-page">
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <h1>My Bookings</h1>
+        <p>View and manage your flight bookings in one place.</p>
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="searchFlights()">Search Flights</button>
+    </header>
+
+    @if (!isLoading && !loadError) {
+      <label class="search-control" for="booking-search">
+        <span class="sr-only">Search bookings</span>
+        <span aria-hidden="true">⌕</span>
+        <input
+          id="booking-search"
+          type="search"
+          placeholder="Search by booking reference, origin, or destination..."
+          [value]="searchTerm"
+          (input)="updateSearch($event)"
+        />
+      </label>
+    }
+
+    @if (isLoading) {
+      <section class="state-card" aria-live="polite">
+        <span class="spinner spinner-lg"></span>
+        <h2>Loading your bookings...</h2>
+        <p>Please wait while we retrieve your flight bookings.</p>
+      </section>
+    } @else if (loadError) {
+      <section class="state-card" role="alert">
+        <div class="state-icon">!</div>
+        <h2>Unable to load your bookings.</h2>
+        <p>Please try again.</p>
+        <button type="button" class="btn btn-primary" (click)="loadBookings()">Try Again</button>
+      </section>
+    } @else if (bookings.length === 0) {
+      <section class="state-card">
+        <div class="state-icon">✈</div>
+        <h2>No bookings yet</h2>
+        <p>Your booked flights will appear here.</p>
+        <button type="button" class="btn btn-primary" (click)="searchFlights()">Search Flights</button>
+      </section>
+    } @else if (filteredBookings.length === 0) {
+      <section class="state-card state-card--compact">
+        <h2>No matching bookings</h2>
+        <p>Try another booking reference, airport, or city code.</p>
+      </section>
+    } @else {
+      <section class="booking-list" aria-label="Bookings">
+        @for (booking of filteredBookings; track booking.id) {
+          <article class="booking-card">
+            <div class="booking-card__top">
+              <div>
+                <span class="booking-ref">{{ booking.bookingRef }}</span>
+                <span class="flight-number">{{ booking.supplier }} · {{ booking.flightNumber }}</span>
+              </div>
+              <span class="badge" [ngClass]="getBookingStatusClass(booking.bookingStatus)">
+                {{ getBookingStatusLabel(booking.bookingStatus) }}
+              </span>
+            </div>
+
+            <div class="booking-card__body">
+              <div class="route">
+                <div><strong>{{ booking.origin }}</strong><span>{{ booking.departureTime | date: 'dd MMM yyyy, HH:mm' }}</span></div>
+                <div class="route-line" aria-hidden="true"><span></span>✈<span></span></div>
+                <div class="route-destination"><strong>{{ booking.destination }}</strong><span>{{ booking.arrivalTime | date: 'HH:mm' }}</span></div>
+              </div>
+              <div class="price-block">
+                <span>Total paid</span>
+                <strong>{{ formatPrice(booking.finalPrice, booking.currency) }}</strong>
+              </div>
+            </div>
+
+            <div class="booking-card__actions">
+              <button type="button" class="btn btn-secondary" (click)="viewDetails(booking.bookingRef)">View Details</button>
+              @if (isCancellable(booking)) {
+                <button type="button" class="btn btn-primary" (click)="manageCancellation(booking.bookingRef)">Cancel</button>
+              }
+            </div>
+          </article>
+        }
+      </section>
+    }
+  </div>
+</main>

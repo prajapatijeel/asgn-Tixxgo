@@ -153,6 +153,30 @@ export interface BookingApiResponse {
   message?: string;
 }
 
+/** Customer-safe summary returned by GET /api/bookings. */
+export interface BookingSummary {
+  id: string;
+  bookingRef: string;
+  supplier: string;
+  flightNumber: string;
+  origin: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  finalPrice: number;
+  currency: string;
+  paymentStatus: PaymentStatus;
+  bookingStatus: BookingStatus;
+  createdAt: string;
+}
+
+/** API response wrapper for the booking-list endpoint. */
+export interface BookingListApiResponse {
+  success: boolean;
+  data: BookingSummary[];
+  message?: string;
+}
+
 // ── Phase 3: Cancellation ─────────────────────────────────────────────
 
 /**
