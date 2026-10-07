@@ -247,6 +247,14 @@ export function mockTboGetStatus(bookingId: string): {
   Status: string;
   PNR: string;
 } {
+  if (typeof bookingId === 'string' && bookingId.toLowerCase().includes('fail')) {
+    return {
+      BookingId: bookingId,
+      Status: 'Failed',
+      PNR: '',
+    };
+  }
+
   return {
     BookingId: bookingId,
     Status: 'Confirmed',
