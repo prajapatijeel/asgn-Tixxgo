@@ -11,7 +11,7 @@ module.exports = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'tixxgo_db',
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
+    port: parseInt(process.env.DB_PORT || '3307', 10),
     dialect: 'mysql',
   },
   test: {
@@ -19,7 +19,7 @@ module.exports = {
     password: process.env.DB_PASSWORD || '',
     database: `${process.env.DB_NAME || 'tixxgo_db'}_test`,
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
+    port: parseInt(process.env.DB_PORT || '3307', 10),
     dialect: 'mysql',
   },
   production: {
@@ -27,7 +27,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '3306', 10),
+    port: parseInt(process.env.DB_PORT || '3307', 10),
     dialect: 'mysql',
   },
 };
